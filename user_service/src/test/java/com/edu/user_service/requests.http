@@ -1,0 +1,27 @@
+###
+POST http://localhost:8081/api/users/register
+Content-Type: application/json
+
+{
+  "name": "nour",
+  "email": "nour@example.com",
+  "password": "1234",
+  "role": "TRAINER"
+}
+###
+POST http://localhost:8081/api/users/auth/login
+Content-Type: application/json
+
+{
+"email": "mayyada@example.com",
+"password": "1234"}
+
+###
+GET http://localhost:8081/api/users
+
+###
+GET http://localhost:8081/api/users/id/2
+
+###
+GET http://localhost:8081/api/users/email/layal@example.com
+

@@ -1,0 +1,21 @@
+POST http://localhost:8084/api/payments/pay
+Content-Type: application/json
+
+{
+  "studentId": 4,
+  "courseId": 50,
+  "amount": 350.0
+}
+
+###
+
+PUT http://localhost:8084/api/enrollments/updateStatus/2
+content-type:application/json
+userId:30
+
+{
+  "status": "FAILED"
+}
+
+
+

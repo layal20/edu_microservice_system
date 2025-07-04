@@ -1,0 +1,46 @@
+POST http://localhost:8085/api/exams/create
+content-type:application/json
+
+{
+
+  "trainerId": 3,
+  "courseId": 40,
+  "title": "Java Final Exam",
+  "description": "A final exam covering core Java topics",
+  "questions": [
+    {
+      "questionText": "What is JVM?",
+      "options": ["Java Virtual Machine", "Java Variable Method", "Java Vendor Model"],
+      "correctAnswer": "Java Virtual Machine"
+    },
+    {
+      "questionText": "Which keyword is used to inherit a class in Java?",
+      "options": ["this", "super", "extends"],
+      "correctAnswer": "extends"
+    }
+  ]
+}
+
+###
+
+POST http://localhost:8085/api/exam-submissions/submit
+content-type:application/json
+
+{
+  "studentId": 2,
+  "examId": 2,
+  "answers": {
+    "1": "Java Virtual Machine",
+    "2": "extends"
+  }
+
+}
+###
+
+GET http://localhost:8085/api/exam-submissions/student/2/exam/3
+
+###
+
+GET http://localhost:8085/api/exam-submissions/course/8/exam/1
+###
+GET http://localhost:8085/api/exam-submissions/student/40

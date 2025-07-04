@@ -1,0 +1,60 @@
+###
+POST http://localhost:8082/api/courses/create
+Content-Type: application/json
+
+{
+  "title": "Java and Spring Boot  Microservices",
+  "description": "Intro to Microservices",
+  "price" : "350",
+  "trainerId": 3
+}
+
+
+
+###
+GET http://localhost:8082/api/courses
+Content-Type: application/json
+
+###
+GET http://localhost:8082/api/courses/pending
+Content-Type: application/json
+userId: 2
+
+
+###
+GET localhost:8082/api/courses/trainer/3
+
+###
+GET localhost:8082/api/courses/id/3
+
+###
+
+PUT http://localhost:8082/api/courses/approve/4
+Content-Type: application/json
+userId: 2000
+
+###
+
+PUT http://localhost:8082/api/courses/reject/3
+Content-Type: application/json
+userId: 20
+
+###
+
+PUT http://localhost:8082/api/courses/edit/3
+Content-Type: application/json
+
+{
+  "title": "Spring Boot llc Microservices",
+  "description": "Intro to Microservices",
+  "price" : "305",
+  "trainerId": 1
+}
+
+###
+
+DELETE http://localhost:8082/api/courses/delete/2
+userId: 1
+
+
+

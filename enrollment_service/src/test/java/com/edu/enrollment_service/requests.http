@@ -1,0 +1,37 @@
+POST http://localhost:8083/api/enrollments/create
+Content-Type: application/json
+
+{
+  "studentId": 40,
+  "courseId": 6
+}
+
+###
+
+POST http://localhost:8083/api/enrollments/internal/create-after-payment
+Content-Type: application/json
+
+{
+  "studentId": 40,
+  "courseId": 3
+}
+
+
+###
+GET localhost:8083/api/enrollments/student/40
+
+
+###
+GET localhost:8083/api/enrollments/paid/student/4
+
+
+###
+GET localhost:8083/api/enrollments/student/50
+
+###
+GET http://localhost:8083/api/enrollments/course/30
+
+###
+GET http://localhost:8083/api/enrollments/student/5/course/6
+###
+
