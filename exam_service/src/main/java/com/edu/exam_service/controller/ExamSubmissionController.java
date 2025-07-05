@@ -6,6 +6,7 @@ import com.edu.exam_service.service.ExamSubmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/exam-submissions")
@@ -19,10 +20,11 @@ public class ExamSubmissionController {
         try {
             ExamSubmission submission = submissionService.submitExam(request);
             return ResponseEntity.ok(submission);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
     }
+
 
     @GetMapping("/student/{studentId}/exam/{examId}")
     public ResponseEntity<?> getSubmissionByStudentAndExam(
@@ -31,8 +33,8 @@ public class ExamSubmissionController {
         try {
             ExamSubmission submission = submissionService.getSubmissionByStudentAndExam(studentId, examId);
             return ResponseEntity.ok(submission);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
     }
 
@@ -43,14 +45,19 @@ public class ExamSubmissionController {
         try {
             ExamSubmission submission = submissionService.getSubmissionByCourseAndExam(courseId, examId);
             return ResponseEntity.ok(submission);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
     }
 
     @GetMapping("/student/{studentId}")
     public ResponseEntity<?> getSubmissionsForStudent(@PathVariable Long studentId) {
-        return ResponseEntity.ok(submissionService.getSubmissionsForStudent(studentId));
+        try {
+            return ResponseEntity.ok(submissionService.getSubmissionsForStudent(studentId));
+        }catch (
+                ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
 
 

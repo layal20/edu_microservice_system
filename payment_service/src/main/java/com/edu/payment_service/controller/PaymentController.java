@@ -6,6 +6,7 @@ import com.edu.payment_service.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -24,8 +25,9 @@ public ResponseEntity<?> pay(@RequestBody PaymentRequest request) {
         return ResponseEntity.ok(
                 paymentService.payForCourse(request.getStudentId(), request.getCourseId(), request.getAmount())
         );
-    } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    }catch (ResponseStatusException ex) {
+        return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
     }
+
 }
 }

@@ -6,6 +6,7 @@ import com.edu.exam_service.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/exams")
@@ -19,8 +20,8 @@ public class ExamController {
         try {
             Exam exam = examService.createExam(request);
             return ResponseEntity.ok(exam);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
     }
 }

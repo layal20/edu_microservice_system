@@ -42,8 +42,6 @@ public class ExamSubmissionService {
         UserResponse student;
             student = safeUserService.getUserById(request.getStudentId());
 
-
-
         if (!"STUDENT".equalsIgnoreCase(student.getRole())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only students can submit exams");
         }

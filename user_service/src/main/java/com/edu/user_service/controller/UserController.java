@@ -8,6 +8,7 @@ import com.edu.user_service.config.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -44,21 +45,33 @@ public class UserController {
 
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable long id) {
-        UserDTO user = userService.findById(id);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<?> getById(@PathVariable long id) {
+        try {
+            UserDTO user = userService.findById(id);
+            return ResponseEntity.ok(user);
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<UserDTO> getByEmail(@PathVariable String email) {
-        UserDTO user = userService.findByEmail(email);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<?> getByEmail(@PathVariable String email) {
+        try {
+            UserDTO user = userService.findByEmail(email);
+            return ResponseEntity.ok(user);
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthRequest request){
-        String response = userService.login(request.getEmail() , request.getPassword());
-        return  ResponseEntity.ok(response);
+        try {
+            String response = userService.login(request.getEmail(), request.getPassword());
+            return ResponseEntity.ok(response);
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
 
 

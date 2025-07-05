@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -32,48 +33,71 @@ public class CourseController {
         try {
             CourseResponse response = courseService.addCourse(request);
             return ResponseEntity.ok(response);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
     }
 
-
     @GetMapping
     public ResponseEntity<?> getApprovedCourses() {
-        return ResponseEntity.ok(courseService.getAllCourses());
+        try{
+            return ResponseEntity.ok(courseService.getAllCourses());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
 
     @GetMapping("/pending")
     public ResponseEntity<?> getPendingCourses(@RequestHeader("userId") Long userId) {
+        try{
+            return ResponseEntity.ok(courseService.getAllPendingCourses(userId));
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
 
-        return ResponseEntity.ok(courseService.getAllPendingCourses(userId));
     }
-
-
-
     @GetMapping("/id/{id}")
-    public ResponseEntity<CourseRequest> getById(@PathVariable long id) {
-        CourseRequest user = courseService.findById(id);
-        log.info("🎯 Handling course request on instance running at port {}", environment.getProperty("server.port"));
+    public ResponseEntity<?> getById(@PathVariable long id) {
+        try {
+            CourseRequest user = courseService.findById(id);
+            log.info("🎯 Handling course request on instance running at port {}", environment.getProperty("server.port"));
 
-        return ResponseEntity.ok(user);
+            return ResponseEntity.ok(user);
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
-
     @GetMapping("/trainer/{trainerId}")
-    public ResponseEntity<List<CourseResponse>> getCoursesByTrainer(@PathVariable Long trainerId) {
-        return ResponseEntity.ok(courseService.getCoursesByTrainer(trainerId));
+    public ResponseEntity<?> getCoursesByTrainer(@PathVariable Long trainerId) {
+
+        try {
+            List<CourseResponse> courses = courseService.getCoursesByTrainer(trainerId);
+            return ResponseEntity.ok(courses);
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
+
     }
 
     @PutMapping("/approve/{id}")
     public ResponseEntity<?> approveCourse(@PathVariable Long id,
                                            @RequestHeader("userId") Long adminId) {
-        return ResponseEntity.ok(courseService.approveCourse(id, adminId));
+        try {
+            return ResponseEntity.ok(courseService.approveCourse(id, adminId));
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
 
     @PutMapping("/reject/{id}")
     public ResponseEntity<?> rejectCourse(@PathVariable Long id,
                                            @RequestHeader("userId") Long adminId) {
-        return ResponseEntity.ok(courseService.rejectCourse(id,adminId));
+
+        try {
+            return ResponseEntity.ok(courseService.rejectCourse(id,adminId));
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        }
     }
 
     @PutMapping("/edit/{id}")
@@ -85,8 +109,8 @@ public class CourseController {
         try {
             CourseResponse updated = courseService.updateCourse(id, courseData, trainerId);
             return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
     }
 
@@ -96,12 +120,9 @@ public class CourseController {
         try {
             courseService.deleteCourse(id, trainerId);
             return ResponseEntity.ok("Course deleted successfully.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
     }
-
-
-
-
 }
+

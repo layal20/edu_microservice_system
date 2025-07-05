@@ -50,7 +50,6 @@ public class CourseService {
 
     }
 
-
     public List<CourseResponse> getAllCourses() {
         List<Course> courses = courseRepository.findByStatus(CourseStatus.APPROVED);
         if (courses.isEmpty()) {
@@ -58,8 +57,6 @@ public class CourseService {
         }
         return courses.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
-
-
 
     public List<CourseResponse> getAllPendingCourses(long userId) {
         UserResponse user;
@@ -101,9 +98,6 @@ public class CourseService {
         return courses.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
-
-
-
     private CourseResponse mapToResponse(Course course) {
         return CourseResponse.builder()
                 .id(course.getId())
@@ -123,7 +117,7 @@ public class CourseService {
         UserResponse user ;
         user = safeUserService.getUserById(userId);
 
-           if (!user.getRole().equals("ADMIN")) {
+        if (!"ADMIN".equalsIgnoreCase(user.getRole())) {
                throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only admins can approve courses");
            }
            if (course.getStatus().equals(CourseStatus.REJECTED)) {
@@ -140,9 +134,6 @@ public class CourseService {
 
     }
 
-
-
-
     public CourseRequest rejectCourse(Long courseId, Long userId) {
 
 
@@ -150,17 +141,10 @@ public class CourseService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Course not found"));
 
-       // try {
             user = safeUserService.getUserById(userId);
 
-//        } catch (FeignException e) {
-//            if (e.status() == 404) {
-//                throw new RuntimeException("Course or Student not found");
-//            } else {
-//                throw new RuntimeException("Remote call error: " + e.getMessage());
-//            }
-//        }
-        if (!user.getRole().equals("ADMIN")) {
+
+        if (!"ADMIN".equalsIgnoreCase(user.getRole())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Only admins can reject courses");
         }
         if (course.getStatus().equals(CourseStatus.APPROVED)) {
@@ -212,10 +196,7 @@ public class CourseService {
 
         courseRepository.delete(existingCourse);
     }
-
-
-
-
-
 }
+
+
 

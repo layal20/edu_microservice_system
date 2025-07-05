@@ -114,7 +114,7 @@ public class EnrollmentService {
             UserResponse user = safeUserService.getUserById(userId);
 
             if (!"TRAINER".equalsIgnoreCase(user.getRole())) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only trainers can enroll");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only trainers can update status");
             }
             Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Enrollment not found"));
@@ -123,9 +123,12 @@ public class EnrollmentService {
         if (!course.getTrainerId().equals(userId)) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You are not the trainer of this course.");
             }
-            if (enrollment.getStatus() != EnrollmentStatus.PENDING_EXAM) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only pending exams can be updated");
-            }
+//            if (enrollment.getStatus() != EnrollmentStatus.PENDING_EXAM) {
+//                throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only pending exams can be updated");
+//            }
+              if (enrollment.getStatus() == EnrollmentStatus.PASSED) {
+                  throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Passed exm cannot be updated");
+              }
             if (status == EnrollmentStatus.PASSED) {
                 enrollment.setPassedExam(true);
             } else if (status == EnrollmentStatus.FAILED) {
